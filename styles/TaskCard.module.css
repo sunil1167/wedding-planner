@@ -1,350 +1,55 @@
 .card {
-  background: var(--white);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border);
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  animation: cardIn 0.4s ease both;
-  display: flex;
-  flex-direction: column;
+  padding: 16px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-
-.card.completed {
-  opacity: 0.72;
-}
-
-.card.completed .cardTitle {
-  text-decoration: line-through;
-  color: var(--text-light);
-}
-
-/* ─── TOP STRIPE ─────────────────────────── */
-.categoryStripe {
-  height: 4px;
-  background: var(--stripe-color, var(--gold));
-}
-
-/* ─── CARD HEADER ─────────────────────────── */
-.cardHeader {
-  padding: 18px 20px 14px;
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.checkBtn {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  flex-shrink: 0;
-  margin-top: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-  background: var(--cream);
-  font-size: 0.8rem;
-  color: transparent;
-}
-
-.checkBtn:hover {
-  border-color: var(--gold);
-  background: var(--gold-pale);
-}
-
-.card.completed .checkBtn {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: white;
-}
-
-.cardMeta {
-  flex: 1;
-  min-width: 0;
-}
-
-.cardTitle {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: var(--text-dark);
-  line-height: 1.3;
-  margin-bottom: 6px;
-}
-
-.cardBadges {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.badge {
-  font-size: 0.68rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 3px 9px;
-  border-radius: 100px;
-  background: var(--badge-bg, var(--cream-dark));
-  color: var(--badge-color, var(--text-mid));
-}
-
-.dateBadge {
-  font-size: 0.7rem;
-  color: var(--text-light);
-  padding: 3px 9px;
-  background: var(--cream-dark);
-  border-radius: 100px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.dateBadge.overdue {
-  background: #fff0f0;
-  color: #c0504d;
-}
-
-/* ─── PAYMENT SECTION ────────────────────── */
-.paymentSection {
-  padding: 0 20px 16px;
-}
-
-.paymentBar {
-  height: 6px;
-  background: var(--cream-dark);
-  border-radius: 100px;
-  overflow: hidden;
-  margin-bottom: 10px;
-}
-
-.paymentFill {
-  height: 100%;
-  border-radius: 100px;
-  transition: width 0.6s ease;
-}
-
-.paymentFill.fullPaid {
-  background: linear-gradient(90deg, var(--sage), #6f9b6f);
-}
-
-.paymentFill.partPaid {
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-}
-
-.paymentFill.notPaid {
-  background: var(--blush);
-  width: 0 !important;
-}
-
-.paymentRow {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.paymentAmounts {
-  display: flex;
-  gap: 14px;
-}
-
-.paymentItem {
-  display: flex;
-  flex-direction: column;
-}
-
-.paymentItemLabel {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-light);
-  font-weight: 600;
-  margin-bottom: 1px;
-}
-
-.paymentItemValue {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-dark);
-}
-
-.paymentStatus {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.badge {
   padding: 4px 10px;
-  border-radius: 100px;
+  border-radius: 999px;
+  font-size: 12px;
 }
 
-.paymentStatus.fullPaid {
-  background: var(--sage-light);
-  color: #4a7a4a;
+.date {
+  font-size: 14px;
+  color: gray;
 }
 
-.paymentStatus.partPaid {
-  background: var(--gold-pale);
-  color: #8a6020;
+.budget p {
+  margin: 4px 0;
 }
 
-.paymentStatus.notPaid {
-  background: var(--rose-light);
-  color: #8a4040;
+.progressBar {
+  height: 6px;
+  background: #eee;
+  border-radius: 10px;
+  margin: 10px 0;
 }
 
-/* ─── CARD ACTIONS ────────────────────────── */
-.cardActions {
-  padding: 12px 20px;
-  border-top: 1px solid var(--cream-dark);
+.progress {
+  height: 100%;
+  background: #4caf50;
+  border-radius: 10px;
+}
+
+.actions {
   display: flex;
   gap: 8px;
-  align-items: center;
+  margin-top: 10px;
 }
 
-.actionBtn {
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--text-light);
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: var(--transition);
-  background: transparent;
+.notesToggle {
+  margin-top: 10px;
 }
 
-.actionBtn:hover {
-  background: var(--cream-dark);
-  color: var(--text-dark);
-}
-
-.actionBtn.danger:hover {
-  background: #fff0f0;
-  color: #c0504d;
-}
-
-.expandBtn {
-  margin-left: auto;
-  font-size: 0.78rem;
-  color: var(--text-light);
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: var(--transition);
-}
-
-.expandBtn:hover {
-  background: var(--cream-dark);
-  color: var(--gold);
-}
-
-.expandIcon {
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-
-.expandIcon.open {
-  transform: rotate(180deg);
-}
-
-/* ─── NOTES SECTION ───────────────────────── */
-.notesSection {
-  overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 0;
-}
-
-.notesSection.open {
-  max-height: 400px;
-}
-
-.notesSectionInner {
-  padding: 16px 20px 20px;
-  border-top: 1px solid var(--cream-dark);
-  background: var(--cream);
-}
-
-.notesLabel {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text-light);
-  margin-bottom: 6px;
-}
-
-.notesText {
-  font-size: 0.85rem;
-  color: var(--text-mid);
-  line-height: 1.65;
-  white-space: pre-wrap;
-}
-
-.notesEmpty {
-  font-style: italic;
-  color: var(--text-light);
-  font-size: 0.82rem;
-}
-
-.notesTextarea {
+.notes textarea {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  color: var(--text-dark);
-  background: var(--white);
-  border: 1.5px solid var(--border);
-  resize: vertical;
-  min-height: 70px;
-  line-height: 1.6;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.notesTextarea:focus {
-  border-color: var(--gold);
-}
-
-.notesDivider {
-  height: 1px;
-  background: var(--border);
-  margin: 12px 0;
-}
-
-.saveNotesBtn {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--gold);
-  padding: 5px 12px;
-  border-radius: var(--radius-sm);
-  background: var(--gold-pale);
   margin-top: 8px;
-  transition: var(--transition);
-}
-
-.saveNotesBtn:hover {
-  background: var(--gold);
-  color: white;
-}
-
-@keyframes cardIn {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
