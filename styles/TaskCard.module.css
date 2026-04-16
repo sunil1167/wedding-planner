@@ -1,55 +1,489 @@
+/* =========================================================
+   TaskCard – Luxury Wedding Planner
+   Aesthetic: Editorial Bridal · Champagne & Ivory
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+/* ── Card Shell ─────────────────────────────────────────── */
 .card {
-  padding: 16px;
-  border-radius: 16px;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  position: relative;
+  background: linear-gradient(160deg, #fdfaf6 0%, #faf5ee 60%, #f7f0e8 100%);
+  border: 1px solid rgba(181, 149, 106, 0.18);
+  border-radius: 20px;
+  padding: 28px 26px 22px;
+  font-family: 'Jost', sans-serif;
+  transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.25s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow:
+    0 4px 24px rgba(150, 110, 60, 0.07),
+    0 1px 3px rgba(150, 110, 60, 0.06),
+    inset 0 1px 0 rgba(255,255,255,0.85);
+  overflow: hidden;
+  will-change: transform;
 }
 
+.card:hover {
+  box-shadow:
+    0 12px 48px rgba(150, 110, 60, 0.13),
+    0 4px 12px rgba(150, 110, 60, 0.09),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  border-color: rgba(181, 149, 106, 0.35);
+}
+
+.card.completed {
+  background: linear-gradient(160deg, #f6faf6 0%, #eef6ee 60%, #e8f2e8 100%);
+  border-color: rgba(120, 160, 120, 0.22);
+  opacity: 0.85;
+}
+
+.card.overdue {
+  border-color: rgba(180, 90, 90, 0.28);
+  background: linear-gradient(160deg, #fdf6f6 0%, #faf0f0 60%, #f7eaea 100%);
+}
+
+.card.toggling {
+  animation: togglePulse 0.6s ease;
+}
+
+@keyframes togglePulse {
+  0%   { transform: perspective(1000px) scale(1); }
+  30%  { transform: perspective(1000px) scale(0.97); }
+  60%  { transform: perspective(1000px) scale(1.02); }
+  100% { transform: perspective(1000px) scale(1); }
+}
+
+/* ── Top accent line ──────────────────────────────────────*/
+.topAccent {
+  position: absolute;
+  top: 0; left: 15%; right: 15%;
+  height: 1.5px;
+  border-radius: 0 0 2px 2px;
+  opacity: 0.7;
+  transition: opacity 0.3s, left 0.3s, right 0.3s;
+}
+.card:hover .topAccent { left: 8%; right: 8%; opacity: 1; }
+
+/* ── Shimmer overlay ──────────────────────────────────────*/
+.shimmer {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.35) 50%, transparent 60%);
+  background-size: 200% 200%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.card:hover .shimmer {
+  opacity: 1;
+  animation: shimmerSlide 1.4s ease infinite;
+}
+@keyframes shimmerSlide {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Header ───────────────────────────────────────────────*/
 .header {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
+  margin-bottom: 14px;
+  gap: 10px;
+}
+
+.titleGroup {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.catIcon {
+  font-size: 22px;
+  line-height: 1;
+  margin-top: 2px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.12));
+}
+
+.title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #3d2e1e;
+  margin: 0 0 6px;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+}
+
+.completed .title {
+  text-decoration: line-through;
+  color: #8a9e8a;
 }
 
 .badge {
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
+  display: inline-block;
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  font-family: 'Jost', sans-serif;
 }
 
-.date {
-  font-size: 14px;
-  color: gray;
+/* ── Status dot ───────────────────────────────────────────*/
+.statusDot { flex-shrink: 0; margin-top: 3px; }
+
+.checkMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px; height: 26px;
+  background: linear-gradient(135deg, #7a9e7a, #5e8a5e);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(90,140,90,0.35);
 }
 
-.budget p {
-  margin: 4px 0;
+.pendingDot {
+  display: block;
+  width: 10px; height: 10px;
+  border: 2px solid var(--accent, #b5956a);
+  border-radius: 50%;
+  background: var(--accent-bg, rgba(181,149,106,0.15));
+  animation: pendingPulse 2.4s ease-in-out infinite;
 }
 
-.progressBar {
-  height: 6px;
-  background: #eee;
+@keyframes pendingPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.85); }
+}
+
+/* ── Date row ─────────────────────────────────────────────*/
+.dateRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  color: #8a7060;
+  margin-bottom: 18px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.dateIcon { font-size: 0.85rem; }
+
+.overdueDate { color: #b05050; }
+.urgentDate  { color: #a07030; }
+
+.urgentTag {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(176, 80, 80, 0.12);
+  color: #b05050;
+  border: 1px solid rgba(176,80,80,0.25);
+  margin-left: 4px;
+}
+
+/* ── Budget ───────────────────────────────────────────────*/
+.budgetSection {
+  background: rgba(255, 252, 248, 0.7);
+  border: 1px solid rgba(181,149,106,0.12);
+  border-radius: 14px;
+  padding: 16px 18px 14px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.budgetRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 8px;
+}
+
+.budgetItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+}
+
+.budgetLabel {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a09080;
+}
+
+.budgetValue {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #3d2e1e;
+  letter-spacing: 0.01em;
+}
+
+.budgetDivider {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, transparent, rgba(181,149,106,0.25), transparent);
+}
+
+/* Progress bar */
+.progressTrack {
+  position: relative;
+  height: 5px;
+  background: rgba(181,149,106,0.12);
   border-radius: 10px;
-  margin: 10px 0;
+  overflow: visible;
 }
 
-.progress {
+.progressFill {
   height: 100%;
-  background: #4caf50;
   border-radius: 10px;
+  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
 }
 
+.progressFill::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: inherit;
+  box-shadow: 0 0 6px var(--accent-glow, #c9a87c);
+}
+
+.progressLabel {
+  position: absolute;
+  right: 0;
+  top: -20px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--accent, #b5956a);
+  font-family: 'Jost', sans-serif;
+}
+
+/* ── Actions ──────────────────────────────────────────────*/
 .actions {
   display: flex;
   gap: 8px;
-  margin-top: 10px;
+  margin-bottom: 16px;
 }
 
+.btn {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, var(--accent, #b5956a), var(--accent-glow, #c9a87c));
+  color: #fff;
+  border-color: transparent;
+  flex: 1;
+  box-shadow: 0 2px 12px rgba(181,149,106,0.28);
+}
+.btnPrimary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(181,149,106,0.4);
+}
+.btnPrimary:active { transform: translateY(0); }
+
+.btnDone {
+  background: linear-gradient(135deg, #7a9e7a, #5e8a5e) !important;
+  box-shadow: 0 2px 12px rgba(90,140,90,0.28) !important;
+}
+
+.btnGhost {
+  background: rgba(255,252,248,0.8);
+  color: #8a7060;
+  border-color: rgba(181,149,106,0.22);
+}
+.btnGhost:hover {
+  background: rgba(181,149,106,0.1);
+  border-color: rgba(181,149,106,0.4);
+  color: #5a4030;
+}
+
+.btnDanger {
+  background: rgba(255,248,248,0.8);
+  color: #c08080;
+  border-color: rgba(180,100,100,0.18);
+  padding: 8px 12px;
+}
+.btnDanger:hover {
+  background: rgba(180,80,80,0.1);
+  border-color: rgba(180,80,80,0.35);
+  color: #b05050;
+}
+.btnConfirm {
+  background: rgba(180,60,60,0.12) !important;
+  color: #b04040 !important;
+  border-color: rgba(180,60,60,0.4) !important;
+  animation: confirmShake 0.3s ease;
+}
+@keyframes confirmShake {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-3px); }
+  75%       { transform: translateX(3px); }
+}
+
+.btnSave {
+  background: linear-gradient(135deg, var(--accent, #b5956a), var(--accent-glow, #c9a87c));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 2px 10px rgba(181,149,106,0.25);
+}
+.btnSave:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(181,149,106,0.38); }
+
+.btnSm { padding: 6px 12px; font-size: 0.7rem; }
+
+/* ── Notes toggle ─────────────────────────────────────────*/
 .notesToggle {
-  margin-top: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-top: 1px solid rgba(181,149,106,0.12);
+  padding: 12px 0 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a09080;
+  transition: color 0.2s;
+  position: relative;
+}
+.notesToggle:hover { color: var(--accent, #b5956a); }
+
+.notesIcon { font-size: 0.6rem; transition: transform 0.2s; }
+
+.notesDot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent, #b5956a);
+  display: inline-block;
+  animation: dotGlow 2s ease infinite;
+}
+@keyframes dotGlow {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
 }
 
-.notes textarea {
+/* ── Notes panel ──────────────────────────────────────────*/
+.notesPanel {
+  margin-top: 14px;
+  animation: notesReveal 0.25s ease;
+}
+@keyframes notesReveal {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.notesFieldLabel {
+  display: block;
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a09080;
+  margin-bottom: 6px;
+  margin-top: 12px;
+}
+.notesFieldLabel:first-child { margin-top: 0; }
+
+.textarea {
   width: 100%;
-  margin-top: 8px;
+  background: rgba(255,252,248,0.8);
+  border: 1px solid rgba(181,149,106,0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.8rem;
+  color: #3d2e1e;
+  line-height: 1.55;
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent, #b5956a);
+  box-shadow: 0 0 0 3px rgba(181,149,106,0.1);
+}
+.textarea::placeholder { color: #c0b0a0; }
+
+.notesBtns {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.notesView { display: flex; flex-direction: column; gap: 6px; }
+
+.notesText {
+  font-size: 0.82rem;
+  color: #5a4a3a;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.extraText {
+  font-size: 0.76rem;
+  color: #8a7a6a;
+  line-height: 1.55;
+  margin: 0;
+  font-style: italic;
+  white-space: pre-wrap;
+}
+
+.notesEmpty {
+  font-size: 0.78rem;
+  color: #c0b0a0;
+  font-style: italic;
+  margin: 0 0 8px;
+}
+
+/* ── Responsive ───────────────────────────────────────────*/
+@media (max-width: 480px) {
+  .card { padding: 22px 18px 18px; }
+  .title { font-size: 1.1rem; }
+  .budgetValue { font-size: 0.9rem; }
+  .actions { flex-wrap: wrap; }
+  .btnPrimary { flex: 1 1 100%; }
 }
