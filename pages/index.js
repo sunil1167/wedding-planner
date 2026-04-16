@@ -7,7 +7,7 @@ const CATEGORIES = ['venue', 'catering', 'decoration', 'photography', 'music', '
 
 const EMPTY_FORM = {
   title: '',
-  category: '',
+  category: 'other',
   dueDate: '',
   totalCost: '',
   amountPaid: '',
@@ -29,13 +29,18 @@ export default function Home() {
       const res = await fetch('/api/tasks');
       const data = await res.json();
 
+      // Mapping variables to match your JSON structure
       const normalized = data.map(t => ({
-        ...t,
-        dueDate: t.dueDate ?? t.due_date ?? '',
-        totalCost: t.totalCost ?? t.total_cost ?? 0,
-        amountPaid: t.amountPaid ?? t.amount_paid ?? 0,
-        extraInfo: t.extraInfo ?? t.extra_info ?? '',
-        createdAt: t.createdAt ?? new Date().toISOString(),
+        id: String(t.id),
+        title: t.title || '',
+        category: t.category || 'other',
+        dueDate: t.dueDate || '',
+        completed: t.completed ?? false,
+        totalCost: parseFloat(t.totalCost) || 0,
+        amountPaid: parseFloat(t.amountPaid) || 0,
+        notes: t.notes || '',
+        extraInfo: t.extraInfo || '',
+        createdAt: t.createdAt || new Date().toISOString(),
       }));
 
       setTasks(normalized);
@@ -51,8 +56,8 @@ export default function Home() {
   const stats = useMemo(() => {
     const total = tasks.length;
     const completed = tasks.filter(t => t.completed).length;
-    const totalBudget = tasks.reduce((s, t) => s + (parseFloat(t.totalCost) || 0), 0);
-    const totalSpent = tasks.reduce((s, t) => s + (parseFloat(t.amountPaid) || 0), 0);
+    const totalBudget = tasks.reduce((s, t) => s + (t.totalCost || 0), 0);
+    const totalSpent = tasks.reduce((s, t) => s + (t.amountPaid || 0), 0);
     const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
     return { total, completed, totalBudget, totalSpent, pct };
   }, [tasks]);
@@ -68,10 +73,10 @@ export default function Home() {
     setEditingTask(task);
     setForm({
       title: task.title || '',
-      category: task.category || '',
+      category: task.category || 'other',
       dueDate: task.dueDate || '',
-      totalCost: task.totalCost != null ? String(task.totalCost) : '',
-      amountPaid: task.amountPaid != null ? String(task.amountPaid) : '',
+      totalCost: String(task.totalCost || ''),
+      amountPaid: String(task.amountPaid || ''),
       notes: task.notes || '',
       extraInfo: task.extraInfo || '',
     });
@@ -80,27 +85,25 @@ export default function Home() {
   }
 
   async function handleSubmit() {
-    if (!form.title.trim()) {
-      setFormError('Task title is required.');
-      return;
-    }
-
+    if (!form.title.trim()) { setFormError('Task title is required.'); return; }
     setSubmitting(true);
     try {
       const payload = {
-        ...editingTask,
-        ...form,
+        title: form.title,
+        category: form.category,
+        dueDate: form.dueDate,
         totalCost: parseFloat(form.totalCost) || 0,
         amountPaid: parseFloat(form.amountPaid) || 0,
-        dueDate: form.dueDate,
+        notes: form.notes,
         extraInfo: form.extraInfo,
+        completed: editingTask ? editingTask.completed : false,
       };
 
       if (editingTask) {
         await fetch(`/api/tasks?id=${editingTask.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+          body: JSON.stringify({ ...payload, id: editingTask.id }),
         });
       } else {
         await fetch('/api/tasks', {
@@ -109,11 +112,10 @@ export default function Home() {
           body: JSON.stringify(payload),
         });
       }
-
       await fetchTasks();
       setShowModal(false);
     } catch (e) {
-      setFormError('Something went wrong. Please try again.');
+      setFormError('Something went wrong.');
     } finally {
       setSubmitting(false);
     }
@@ -121,48 +123,42 @@ export default function Home() {
 
   async function handleDelete(id) {
     if (!confirm('Delete this task?')) return;
-
     await fetch(`/api/tasks?id=${id}`, { method: 'DELETE' });
     await fetchTasks();
   }
 
   async function handleToggle(id, completed) {
     const task = tasks.find(t => t.id === id);
-
     await fetch(`/api/tasks?id=${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...task, completed }),
     });
-
     await fetchTasks();
   }
 
   async function handleUpdateNotes(id, { notes, extraInfo }) {
     const task = tasks.find(t => t.id === id);
-
     await fetch(`/api/tasks?id=${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...task, notes, extraInfo }),
     });
-
     await fetchTasks();
   }
 
   return (
     <>
-      <Head>
-        <title>Wedding Planner — Tasks & Budget</title>
-      </Head>
+      <Head><title>Wedding Planner — Tasks & Budget</title></Head>
 
       <div className={styles.page}>
-        <button className={styles.addBtn} onClick={openAdd}>
-          ＋ Add Task
-        </button>
+        <div className={styles.header}>
+            <h1>Wedding Roadmap</h1>
+            <button className={styles.addBtn} onClick={openAdd}>＋ Add Task</button>
+        </div>
 
         {loading ? (
-          <div>Loading...</div>
+          <div className={styles.loader}>Loading...</div>
         ) : (
           <div className={styles.taskGrid}>
             {tasks.map((task) => (
@@ -180,33 +176,47 @@ export default function Home() {
       </div>
 
       {showModal && (
-        <div className={styles.modal}>
-          <input
-            value={form.title}
-            onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-          />
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3>{editingTask ? 'Edit Task' : 'New Task'}</h3>
+            
+            <label>Title</label>
+            <input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="e.g. Wedding Cake" />
 
-          <input
-            type="date"
-            value={form.dueDate}
-            onChange={e => setForm(f => ({ ...f, dueDate: e.target.value }))}
-          />
+            <label>Category</label>
+            <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
+                {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat.toUpperCase()}</option>)}
+            </select>
 
-          <input
-            type="number"
-            value={form.totalCost}
-            onChange={e => setForm(f => ({ ...f, totalCost: e.target.value }))}
-          />
+            <label>Due Date</label>
+            <input type="date" value={form.dueDate} onChange={e => setForm(f => ({ ...f, dueDate: e.target.value }))} />
 
-          <input
-            type="number"
-            value={form.amountPaid}
-            onChange={e => setForm(f => ({ ...f, amountPaid: e.target.value }))}
-          />
+            <div className={styles.formRow}>
+                <div>
+                    <label>Total Cost</label>
+                    <input type="number" value={form.totalCost} onChange={e => setForm(f => ({ ...f, totalCost: e.target.value }))} placeholder="0" />
+                </div>
+                <div>
+                    <label>Amount Paid</label>
+                    <input type="number" value={form.amountPaid} onChange={e => setForm(f => ({ ...f, amountPaid: e.target.value }))} placeholder="0" />
+                </div>
+            </div>
 
-          <button onClick={handleSubmit}>
-            {submitting ? 'Saving...' : editingTask ? 'Update' : 'Add'}
-          </button>
+            <label>Notes</label>
+            <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Details..." />
+
+            <label>Extra Info / Contacts</label>
+            <input value={form.extraInfo} onChange={e => setForm(f => ({ ...f, extraInfo: e.target.value }))} placeholder="Vendor contact info..." />
+
+            {formError && <p className={styles.error}>{formError}</p>}
+
+            <div className={styles.modalActions}>
+                <button className={styles.cancelBtn} onClick={() => setShowModal(false)}>Cancel</button>
+                <button className={styles.saveBtn} onClick={handleSubmit} disabled={submitting}>
+                    {submitting ? 'Saving...' : editingTask ? 'Update Task' : 'Add Task'}
+                </button>
+            </div>
+          </div>
         </div>
       )}
     </>
