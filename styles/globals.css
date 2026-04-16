@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --cream: #fdf8f0;
+  --cream-dark: #f5ede0;
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --gold-pale: #f7edd8;
+  --rose: #d4a0a0;
+  --rose-light: #f2e0e0;
+  --sage: #8aad8a;
+  --sage-light: #d9ebd9;
+  --blush: #e8c4c4;
+  --text-dark: #2c2417;
+  --text-mid: #6b5744;
+  --text-light: #a0896e;
+  --border: #e8d9c5;
+  --white: #ffffff;
+  --shadow-sm: 0 2px 8px rgba(150, 100, 50, 0.08);
+  --shadow-md: 0 4px 20px rgba(150, 100, 50, 0.12);
+  --shadow-lg: 0 8px 40px rgba(150, 100, 50, 0.16);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Jost', sans-serif;
+  background-color: var(--cream);
+  color: var(--text-dark);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 10% 20%, rgba(201, 168, 76, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(212, 160, 160, 0.08) 0%, transparent 50%);
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+input, textarea, select, button {
+  font-family: 'Jost', sans-serif;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: var(--transition);
+}
+
+input, textarea, select {
+  outline: none;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--text-dark);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
+}
+
+::selection {
+  background: var(--gold-pale);
+  color: var(--text-dark);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cream-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold-light);
+  border-radius: 3px;
+}

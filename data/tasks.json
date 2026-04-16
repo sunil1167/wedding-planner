@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "title": "Book the Venue",
+    "category": "venue",
+    "dueDate": "2025-03-01",
+    "completed": true,
+    "totalCost": 15000,
+    "amountPaid": 15000,
+    "notes": "Grand Ballroom at The Rosewood Hotel. Contact: Sarah Johnson, 555-0101. Includes tables, chairs, and basic decor.",
+    "extraInfo": "Parking for 200 cars included. Setup time from 8am.",
+    "createdAt": "2024-01-10T10:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "title": "Hire Catering Service",
+    "category": "catering",
+    "dueDate": "2025-04-15",
+    "completed": false,
+    "totalCost": 8000,
+    "amountPaid": 3000,
+    "notes": "3-course dinner for 150 guests. Vegetarian options required. Champagne toast included.",
+    "extraInfo": "Menu tasting scheduled for Feb 20th.",
+    "createdAt": "2024-01-12T10:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "title": "Wedding Photography",
+    "category": "photography",
+    "dueDate": "2025-05-01",
+    "completed": false,
+    "totalCost": 4500,
+    "amountPaid": 1500,
+    "notes": "Full day coverage, 2 photographers. Drone shots of venue. 500 edited photos delivered within 6 weeks.",
+    "extraInfo": "Contact: Mark & Lisa Photography Studio, 555-0202",
+    "createdAt": "2024-01-15T10:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "title": "Floral Arrangements",
+    "category": "decoration",
+    "dueDate": "2025-05-10",
+    "completed": false,
+    "totalCost": 3200,
+    "amountPaid": 0,
+    "notes": "White roses and peonies. Centerpieces for 15 tables, bridal bouquet, 4 bridesmaids bouquets.",
+    "extraInfo": "Bloom & Blossom Florals - confirm order 2 weeks before.",
+    "createdAt": "2024-01-18T10:00:00.000Z"
+  },
+  {
+    "id": "5",
+    "title": "Wedding Cake",
+    "category": "catering",
+    "dueDate": "2025-05-15",
+    "completed": false,
+    "totalCost": 900,
+    "amountPaid": 200,
+    "notes": "4-tier fondant cake. Vanilla sponge with raspberry filling. Floral sugar decorations.",
+    "extraInfo": "Sweet Occasions Bakery. Tasting appointment: March 5th.",
+    "createdAt": "2024-01-20T10:00:00.000Z"
+  }
+]
